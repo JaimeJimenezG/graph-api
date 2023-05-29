@@ -1,5 +1,5 @@
 [package]
-name = "rust-diesel-orm"
+name = "graph-api"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,9 +7,14 @@ edition = "2021"
 
 [dependencies]
 actix = "0.13.0"
-actix-web = "4.2.1"
-chrono = "0.4.22"
-diesel = { version = "2.0.2", features = ["postgres", "r2d2", "chrono"] }
+actix-cors = "0.6.4"
+actix-session = { version = "0.7.2", features = ["cookie-session"] }
+actix-web = "4.3.1"
+argon2 = "0.5.0"
+chrono = { version = "0.4.24", features = ["serde"] }
+diesel = { version = "2.1.0", features = ["postgres", "r2d2", "chrono"] }
 dotenv = "0.15.0"
-serde = { version = "1.0.145", features = ["derive"] }
-serde_json = "1.0.86"
+password-hash = "0.5.0"
+serde = { version = "1.0.163", features = ["derive"] }
+serde_json = "1.0.96"
+smartcore = {version = "0.3.2", features=["serde"]}

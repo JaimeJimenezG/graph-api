@@ -7,3 +7,4 @@
 7. diesel print-schema > src/schema.rs
 8. diesel_ext > src/db_models.rs
 9. https://github.com/diesel-rs/diesel/discussions/2947#discussioncomment-2025857
+10. cargo run
