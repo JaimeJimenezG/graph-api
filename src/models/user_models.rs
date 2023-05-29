@@ -1,3 +1,5 @@
+use actix_session::Session;
+use actix_web::error::ErrorUnauthorized;
 use diesel::{Queryable, Insertable, QueryResult, self,  prelude::*};
 use serde::{Serialize, Deserialize};
 use actix::{Handler, Message};
@@ -51,10 +53,17 @@ pub struct FetchUserGroups {
 }
 
 #[derive(Message, Deserialize)]
-#[rtype(result = "QueryResult<bool>")]
+#[rtype(result = "QueryResult<User>")]
 pub struct LoginUser {
   pub nickname: String,
   pub password: String
+}
+
+pub fn check_auth(session: &Session) -> Result<u32, actix_web::Error> {
+  match session.get::<u32>("user_id").unwrap() {
+      Some(user_id) => Ok(user_id),
+      None => Err(ErrorUnauthorized("User not logged in.")),
+  }
 }
 
 impl Handler<FetchUserGroups> for crate::services::database_service::DbActor {
@@ -103,35 +112,17 @@ impl Handler<CreateUser> for crate::services::database_service::DbActor {
 }
 
 impl Handler<LoginUser> for crate::services::database_service::DbActor {
-  type Result = QueryResult<bool>;
-
+  type Result = QueryResult<User>;
+  
   fn handle(&mut self, _msg: LoginUser, _ctx: &mut Self::Context) -> Self::Result {
 
     let mut conn = self.0.get().expect("Fetch User: Unable to establish connection");
 
-    let fetched_user = &mut users
+    users
       .filter(nickname.eq(_msg.nickname))
       .filter(password.eq(_msg.password))
       .limit(1)
-      .get_result::<User>(&mut conn)?;
-    
-      if fetched_user.id >= 1 {
-          if !fetched_user.active {
-            print!("User is not active.");
-              return Ok(false);
-          }
-          print!("User logged in successfully.");
-          // Study how to implement this
-          // Session Module
-          // session.insert("user_id", &fetched_user.id)?;
-          // session.renew();
-            
-
-          Ok(true)
-        } else {
-          print!("User not found.");
-          Ok(false)
-        }
+      .get_result::<User>(&mut conn)
   }
 }
 

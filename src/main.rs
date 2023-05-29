@@ -1,4 +1,4 @@
-use services::{database_service::{get_pool, AppState, DbActor}, group_service::fetch_groups, user_service::fetch_user_groups, user_service::{create_user_chart, fetch_user_charts, fetch_users, fetch_user_navigations}, navigation_service::fetch_public_navigations, auth_service::{login_user, register_user}};
+use services::{database_service::{get_pool, AppState, DbActor}, group_service::fetch_groups, user_service::fetch_user_groups, user_service::{create_user_chart, fetch_user_charts, fetch_users, fetch_user_navigations}, navigation_service::fetch_public_navigations, auth_service::{login_user, register_user, logout_user}};
 use actix_session::{SessionMiddleware, storage::CookieSessionStore};
 use diesel::{r2d2::{ConnectionManager, Pool}, PgConnection};
 use actix_web::{web::Data, App, HttpServer, http, cookie::Key};
@@ -37,6 +37,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .app_data(Data::new(AppState { db: db_addr.clone() }))
             .service(login_user)
+            .service(logout_user)
             .service(register_user)
             .service(fetch_users)
             .service(fetch_user_charts)
