@@ -1,8 +1,9 @@
-use diesel::{Queryable, Insertable, QueryResult, self,  prelude::*};
-use serde::{Serialize};
-use actix::{Handler, Message};
-use crate::schema::groups::dsl::*;
+use diesel::{Queryable, Insertable, QueryResult};
+use serde::Serialize;
+use actix::Message;
+
 use crate::schema::groups;
+
 
 #[derive(Queryable, Serialize)]
 pub struct Group {
@@ -28,13 +29,3 @@ pub struct NewGroup {
     pub created_at: chrono::NaiveDateTime,
     pub updated_at: chrono::NaiveDateTime
 }
-
-impl Handler<FetchGroup> for crate::services::database_service::DbActor {
-    type Result = QueryResult<Vec<Group>>;
-  
-    fn handle(&mut self, _msg: FetchGroup, _ctx: &mut Self::Context) -> Self::Result {
-      let mut conn = self.0.get().expect("Fetch Group: Unable to establish connection");
-  
-      groups.get_results::<Group>(&mut conn)
-    }
-  }

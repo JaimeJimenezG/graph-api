@@ -1,13 +1,15 @@
-use services::{database_service::{get_pool, AppState, DbActor}, group_service::fetch_groups, user_service::fetch_user_groups, user_service::{create_user_chart, fetch_user_charts, fetch_users, fetch_user_navigations}, navigation_service::fetch_public_navigations, auth_service::{login_user, register_user, logout_user}};
 use actix_session::{SessionMiddleware, storage::CookieSessionStore};
 use diesel::{r2d2::{ConnectionManager, Pool}, PgConnection};
 use actix_web::{web::Data, App, HttpServer, http, cookie::Key};
 use actix_cors::Cors;
 use dotenv::dotenv;
+use services::{auth_service::{login_user, logout_user, register_user}, user_service::{fetch_users, fetch_user_charts, create_user_chart, fetch_user_navigations, fetch_user_groups}, navigation_service::fetch_public_navigations, group_service::fetch_groups};
+use utils::database_utils::{AppState, DbActor, get_pool};
 use std::env;
 mod services;
 mod models;
 mod schema;
+mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

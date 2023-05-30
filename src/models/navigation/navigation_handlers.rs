@@ -1,33 +1,10 @@
-use diesel::{Queryable, QueryResult, self,  prelude::*};
-use serde::Serialize;
-use actix::{Handler, Message};
-
+use actix::Handler;
+use diesel::{QueryResult, PgConnection, QueryDsl, ExpressionMethods, prelude::*};
 use crate::schema::{navigations, user_navigations};
+use super::navigation_models::{FetchUserNavigations, Navigation, FetchPublicNavigations};
 
-#[derive(Queryable, Serialize)]
-pub struct Navigation {
-    pub id: i32,
-    pub name: String,
-    pub url: String,
-    pub public: bool,
-    pub created_at: chrono::NaiveDateTime,
-    pub updated_at: chrono::NaiveDateTime,
-    pub component_id: i32,
-    pub icon: String,
-    pub order: i32
-}
 
-#[derive(Message)]
-#[rtype(result = "QueryResult<Vec<Navigation>>")]
-pub struct FetchUserNavigations {
-    pub user_id: i32
-}
-
-#[derive(Message)]
-#[rtype(result = "QueryResult<Vec<Navigation>>")]
-pub struct FetchPublicNavigations;
-
-impl Handler<FetchUserNavigations> for crate::services::database_service::DbActor {
+impl Handler<FetchUserNavigations> for crate::utils::database_utils::DbActor {
     type Result = QueryResult<Vec<Navigation>>;
 
     fn handle(&mut self, _msg: FetchUserNavigations, _ctx: &mut Self::Context) -> Self::Result {
@@ -43,7 +20,7 @@ impl Handler<FetchUserNavigations> for crate::services::database_service::DbActo
     }
 }
 
-impl Handler<FetchPublicNavigations> for crate::services::database_service::DbActor {
+impl Handler<FetchPublicNavigations> for crate::utils::database_utils::DbActor {
     type Result = QueryResult<Vec<Navigation>>;
 
     fn handle(&mut self, _msg: FetchPublicNavigations, _ctx: &mut Self::Context) -> Self::Result {

@@ -1,6 +1,7 @@
 use actix::Addr;
 use actix_web::{ get, Responder, HttpResponse, web::Data};
-use crate::{AppState, DbActor, models::group_models::FetchGroup};
+
+use crate::{utils::database_utils::{AppState, DbActor}, models::group::group_models::FetchGroup};
 
 
 #[get("/groups")]

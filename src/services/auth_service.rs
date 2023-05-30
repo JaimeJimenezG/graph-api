@@ -1,7 +1,9 @@
 use actix::Addr;
 use actix_session::Session;
 use actix_web::{ post, web::{ Data, Json }, Responder, HttpResponse, get};
-use crate::{AppState, DbActor, models::user_models::{ CreateUser, LoginUser, check_auth }};
+
+use crate::{utils::{database_utils::{AppState, DbActor}, auth_utils::check_auth}, models::user::user_models::{CreateUser, LoginUser}};
+
 
 #[post("/user/cerate")]
 pub async fn register_user(state: Data<AppState>, body: Json<CreateUser>) -> impl Responder {
@@ -27,6 +29,7 @@ pub async fn register_user(state: Data<AppState>, body: Json<CreateUser>) -> imp
         _ => HttpResponse::InternalServerError().json("Unnable to register user"),
     }
 }
+
 #[post("/user/login")]
 pub async fn login_user(state: Data<AppState>, body: Json<LoginUser>, session: Session) -> impl Responder {
     let user = body.into_inner();

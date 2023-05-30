@@ -1,6 +1,6 @@
 use actix::Addr;
 use actix_web::{ get, post, web::{Data, Json, Path}, Responder, HttpResponse};
-use crate::{AppState, DbActor, models::{chart_models::{FetchUserChart, CreateChart}, user_models::{FetchUser, FetchUserGroups}, navigation_models::FetchUserNavigations}};
+use crate::{utils::database_utils::{AppState, DbActor}, models::{user::user_models::{FetchUser, FetchUserGroups}, chart::chart_models::{FetchUserChart, CreateChart}, navigation::navigation_models::FetchUserNavigations}};
 
 
 #[get("/users")]

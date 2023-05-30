@@ -1,6 +1,5 @@
-use diesel::{Queryable, Insertable, QueryResult, self,  prelude::*};
+use diesel::Queryable;
 use serde::{Deserialize, Serialize};
-use actix::{Handler, Message};
 
 #[derive(Queryable, Serialize, Deserialize)]
 pub struct ChartUser {

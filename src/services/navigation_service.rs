@@ -1,6 +1,7 @@
 use actix::Addr;
 use actix_web::{ get, web::Data, Responder, HttpResponse};
-use crate::{AppState, DbActor, models::{navigation_models:: FetchPublicNavigations}};
+
+use crate::{models::navigation::navigation_models::FetchPublicNavigations, utils::database_utils::{DbActor, AppState}};
 
 
 
