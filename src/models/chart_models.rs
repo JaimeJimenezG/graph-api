@@ -9,7 +9,6 @@ use crate::schema::charts;
 pub struct Chart {
   pub id: i32,
   pub title: String,
-  pub user_id: i32,
   pub created_at: chrono::NaiveDateTime,
   pub updated_at: chrono::NaiveDateTime,
   pub active: bool
@@ -23,16 +22,13 @@ pub struct CreateChart {
 
 #[derive(Message)]
 #[rtype(result = "QueryResult<Vec<Chart>>")]
-pub struct FetchUserChart {
-  pub user_id: i32
-}
+pub struct FetchUserChart;
 
 #[derive(Insertable, Serialize)]
 #[diesel(table_name=charts)]
 pub struct NewChart {
   pub title: String,
-  pub user_id: i32
-}
+  }
 
 impl Handler<CreateChart> for crate::services::database_service::DbActor {
   type Result = QueryResult<Chart>;
@@ -41,8 +37,7 @@ impl Handler<CreateChart> for crate::services::database_service::DbActor {
     let mut conn = self.0.get().expect("Create User Charts: Unable to establish connection");
 
     let new_charts = NewChart {
-      title: msg.title,
-      user_id: 1 // TODO: Change relation
+      title: msg.title
     };
 
     diesel::insert_into(charts)

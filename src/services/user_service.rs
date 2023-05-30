@@ -20,7 +20,7 @@ pub async fn fetch_user_charts(state: Data<AppState>, path: Path<i32>) -> impl R
 
     let db: Addr<DbActor> = state.as_ref().db.clone();
 
-    match db.send(FetchUserChart { user_id: id }).await {
+    match db.send(FetchUserChart).await {
         Ok(Ok(info)) => HttpResponse::Ok().json(info),
         Ok(Err(_)) => HttpResponse::NotFound().json(format!("No charts for user {id}")),
         _ => HttpResponse::InternalServerError().json("Unable to retrieve user charts"),
