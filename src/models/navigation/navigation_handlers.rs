@@ -15,7 +15,6 @@ impl Handler<FetchUserNavigations> for crate::utils::database_utils::DbActor {
         .filter(user_navigations::user_id.eq(_msg.user_id))
         .filter(user_navigations::active.eq(true))
         .select(navigations::all_columns)
-        .order(navigations::order.asc())
         .get_results::<Navigation>(&mut conn)
     }
 }
